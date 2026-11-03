@@ -1,0 +1,19 @@
+{
+ "open_folder": 3.8,
+ "new_folder": 3.84,
+ "select_folder": 4.64,
+ "new_file": 4.08,
+ "write": 2.31,
+ "save": 1.11,
+ "run_menu": 2.94,
+ "debugger": 7.08,
+ "shortcut": 14.94,
+ "function": 2.14,
+ "single_quotes": 19.28,
+ "quotes_match": 5.89,
+ "squiggle": 5.27,
+ "more_args": 21.5,
+ "sep_how": 17.72,
+ "sep_space": 17.38,
+ "more_lines": 24.23
+}

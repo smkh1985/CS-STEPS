@@ -1,0 +1,250 @@
+title: "Hello, World! Your first Python program"
+lower_third: "Your first Python program"
+
+# VS Code (the recorder's throwaway profile, full screen) starting with NO folder: the lesson
+# opens one with File > Open Folder and makes Documents\lesson0 in Windows' own folder dialog.
+app: vscode
+empty_window: true
+setup:
+  - 'if exist "%USERPROFILE%\Documents\lesson0" rmdir /s /q "%USERPROFILE%\Documents\lesson0"'
+vscode_extensions: [ms-python.python, ms-python.debugpy, ms-python.vscode-pylance, ms-python.vscode-python-envs]
+# C:\Python310 is on this PC's system PATH; a student's clean PC only has uv's Python
+terminal_path_exclude: ['C:\Python310', 'C:\python 38']
+vscode_settings:
+  files.simpleDialog.enable: false        # Windows' real Open Folder dialog, as students see it
+  window.menuBarVisibility: visible       # File and Run menus in full screen
+  terminal.integrated.cwd: ""             # the terminal opens in the folder we open, not in work/
+  python.defaultInterpreterPath: '%USERPROFILE%\.local\bin\python.exe'   # uv's Python 3.15.2
+
+# Camera zooms (16:9). The terminal one shows its left part: each run first prints a long
+# launcher command across the whole width, and our output is the short line under it.
+regions:
+  dialog: [546, 300, 846, 476]          # Windows' Open Folder dialog (centred by `window:`)
+  terminal: [352, 540, 960, 540]        # the terminal panel, left half
+
+# Measured 2026-11-02 with shots/cuttest/explore_lesson.py (shots/hw*.png): VS Code 1.144.1 full
+# screen at zoom 0; the folder dialog as `window:` centres it on the recording monitor.
+targets:
+  file_menu: [24, 17]
+  open_folder_item: [76, 177]
+  documents: [716, 499]                 # Quick access > Documents, in the dialog
+  new_folder_button: [771, 383]
+  select_folder_button: [1130, 749]
+  folder_header: [96, 82]               # "lesson0" in the Explorer (New File shows on hover)
+  run_menu_item_no_debug: [330, 70]
+  python_debugger: [726, 56]            # first Run: "Select debugger" > Python Debugger
+  picker_border: [1000, 39]             # that picker's blue input-box border (377894) while it's open
+  aside: [1500, 600]
+
+steps:
+  # --- Intro ------------------------------------------------------------------------------
+  - id: cold_open
+    speaker: teacher
+  - id: plan
+    speaker: teacher
+
+  # --- Open a folder ----------------------------------------------------------------------
+  - id: tour
+    speaker: teacher
+  - id: open_folder
+    speaker: teacher
+    actions:
+      - at: 1
+      - click: file_menu
+      - at: 2
+      - click: open_folder_item
+      - window: "Open Folder"
+  - id: new_folder
+    speaker: teacher
+    camera: dialog
+    actions:
+      - at: 1
+      - click: documents
+      - at: 2
+      - click: new_folder_button
+      - wait: 0.8
+      - at: 3
+      - type: "lesson0\n"
+  - id: select_folder
+    speaker: teacher
+    camera: dialog
+    actions:
+      - at: 1
+      - click: select_folder_button
+      - window: back
+      - wait: 3
+
+  # --- hello.py ---------------------------------------------------------------------------
+  - id: new_file
+    speaker: teacher
+    actions:
+      - at: 1
+      - move: folder_header
+      - at: 2
+      - click: new_file
+      - type: "hello.py\n"
+      - wait: 1
+  - id: py_icon
+    speaker: teacher
+
+  # --- Write and run ----------------------------------------------------------------------
+  - id: write
+    speaker: teacher
+    actions:
+      - at: 1
+      - type: 'print("Hello, World!")'
+  - id: save
+    speaker: teacher
+    actions:
+      - at: 1
+      - key: ctrl+s
+  - id: run_menu
+    speaker: teacher
+    actions:
+      - at: 1
+      - click: run_menu
+      # straight down into the menu first: crossing "Terminal" in the menu bar would switch menus
+      - move: run_menu_down
+      - at: 2
+      - click: run_menu_item_no_debug
+  - id: debugger
+    speaker: teacher
+    actions:
+      # the picker comes up only once the Python extension has loaded: wait for it
+      - wait_pixel: {at: picker_border, is: "377894", timeout: 30}
+      - at: 1
+      - click: python_debugger
+      - move: aside
+      - wait_shell: terminal
+  - id: debugging_later
+    speaker: teacher
+  - id: output
+    speaker: teacher
+    camera: terminal
+  - id: congrats
+    speaker: teacher
+    camera: terminal
+  - id: shortcut
+    speaker: teacher
+    camera: terminal
+    actions:
+      - at: 1
+      - key: ctrl+F5
+      - wait: 2.5             # a run takes ~1 s; wait_shell would time out on the Python Debug Console
+
+  # --- print() explained ------------------------------------------------------------------
+  - id: function
+    speaker: teacher
+    actions:
+      - at: 1
+      - line: 1
+      - key: Home shift+End
+  - id: machine
+    speaker: teacher
+  - id: parentheses
+    speaker: teacher
+  - id: quotes_why
+    speaker: teacher
+  - id: quotes_literal
+    speaker: teacher
+
+  # --- Single or double quotes ------------------------------------------------------------
+  - id: single_quotes
+    speaker: teacher
+    type_speed: 1.4
+    actions:
+      - at: 1
+      - line: 1
+      - key: Home shift+End
+      - type: "print('Hello, World!')"
+      - key: ctrl+s
+      - key: ctrl+F5
+      - wait: 2.5             # a run takes ~1 s; wait_shell would time out on the Python Debug Console
+  - id: quotes_match
+    speaker: teacher
+    actions:
+      - at: 1
+      - line: 1
+      - key: Home shift+End
+      - type: "print(\"Hello, World!')"
+      - wait: 2
+  - id: squiggle
+    speaker: teacher
+    type_speed: 1.6
+    actions:
+      - at: 1
+      - line: 1
+      - key: Home shift+End
+      - type: 'print("Hello, World!")'
+      - key: ctrl+s
+
+  # --- More arguments, sep ----------------------------------------------------------------
+  - id: more_args
+    speaker: teacher
+    type_speed: 1.6
+    actions:
+      - at: 1
+      - line: 1
+      - key: Home shift+End
+      - type: 'print("Hello", "World", "from Python")'
+      - key: ctrl+s
+      - key: ctrl+F5
+      - wait: 2.5             # a run takes ~1 s; wait_shell would time out on the Python Debug Console
+  - id: more_args_result
+    speaker: teacher
+    camera: terminal
+  - id: sep_why
+    speaker: teacher
+  - id: sep_how
+    speaker: teacher
+    actions:
+      - at: 1
+      - line: 1
+      - key: Left
+      - type: ', sep=","'
+      - key: ctrl+s
+      - key: ctrl+F5
+      - wait: 2.5             # a run takes ~1 s; wait_shell would time out on the Python Debug Console
+  - id: sep_result
+    speaker: teacher
+    camera: terminal
+  - id: sep_space
+    speaker: teacher
+    type_speed: 1.6
+    actions:
+      - at: 1
+      - line: 1
+      - key: Left Left             # end of line is  sep=",")  : two Lefts put us after the comma
+      - type: " "
+      - key: ctrl+s
+      - key: ctrl+F5
+      - wait: 2.5             # a run takes ~1 s; wait_shell would time out on the Python Debug Console
+  - id: sep_space_result
+    speaker: teacher
+    camera: terminal
+
+  # --- More lines -------------------------------------------------------------------------
+  - id: more_lines
+    speaker: teacher
+    type_speed: 2.0
+    actions:
+      - at: 1
+      - line: 1
+      - type: "\nprint(\"This is my first Python program.\")\nprint(\"I'm learning Python!\")"
+      - key: ctrl+s
+      - key: ctrl+F5
+      - wait: 2.5             # a run takes ~1 s; wait_shell would time out on the Python Debug Console
+  - id: top_to_bottom
+    speaker: teacher
+    camera: terminal
+  - id: apostrophe
+    speaker: teacher
+    camera: terminal
+
+  # --- Wrap up ----------------------------------------------------------------------------
+  - id: recap
+    speaker: teacher
+  - id: assignment
+    speaker: teacher
+  - id: outro
+    speaker: teacher
